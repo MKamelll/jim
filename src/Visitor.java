@@ -1,4 +1,4 @@
 public interface Visitor {
-    public void visit(Primary node);
-    public void visit(Binary node);
+    public void visit(Primary node) throws Exception;
+    public void visit(Binary node) throws Exception;
 }

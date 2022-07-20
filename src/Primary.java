@@ -18,7 +18,7 @@ abstract public class Primary extends Expression {
         }
 
         @Override
-        public void accept(Visitor v) {
+        public void accept(Visitor v) throws Exception {
             v.visit(this);
         }
     }
@@ -39,7 +39,7 @@ abstract public class Primary extends Expression {
         }
 
         @Override
-        public void accept(Visitor v) {
+        public void accept(Visitor v) throws Exception {
             v.visit(this);
         }
     }

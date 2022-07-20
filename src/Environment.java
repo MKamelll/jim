@@ -5,10 +5,12 @@ public class Environment {
     Environment mEnclosing;
 
     Environment() {
+        mData = new HashMap<String, Double>();
         mEnclosing = null;
     }
 
     Environment(Environment env) {
+        mData = new HashMap<String, Double>();
         mEnclosing = env;
     }
 

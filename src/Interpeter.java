@@ -5,10 +5,12 @@ public class Interpeter implements Visitor {
     private ArrayList<Expression> mTree;
     private int mCurrIndex;
     private Object mResult;
+    private Environment mGlobals;
 
     Interpeter(ArrayList<Expression> tree) {
         mTree = tree;
         mCurrIndex = 0;
+        mGlobals = new Environment();
     }
 
     private boolean isAtEnd() {
@@ -28,7 +30,7 @@ public class Interpeter implements Visitor {
         return mTree.get(mCurrIndex - 1);
     }
 
-    public Object interpret() {
+    public Object interpret() throws Exception {
         if (isAtEnd()) return mResult;
         curr().accept(this);
         advance();
@@ -36,16 +38,16 @@ public class Interpeter implements Visitor {
     }
 
     @Override
-    public void visit(Primary node) {
+    public void visit(Primary node) throws Exception {
         if (node instanceof Primary.Number) {
             mResult = node.getValue();
         } else if (node instanceof Primary.Identifier) {
-            mResult = node.getValue();
+            mResult = mGlobals.get(node.getValue().toString());
         }
     }
 
     @Override
-    public void visit(Binary node) {
+    public void visit(Binary node) throws Exception {
         switch (node.getOp()) {
             case "+":
             {
