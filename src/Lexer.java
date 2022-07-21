@@ -114,6 +114,8 @@ public class Lexer {
                         return new Token(TokenType.FUNCTION, ident);
                     } else if (ident.equals("let")) {
                         return new Token(TokenType.LET, ident);
+                    } else if (ident.equals("return")) {
+                        return new Token(TokenType.RETURN, ident);
                     }
                     return new Token(TokenType.IDENTIFIER, ident);
                 }

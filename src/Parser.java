@@ -93,7 +93,7 @@ public class Parser {
 
     private Expression parseLet() throws Exception {
         if (match(TokenType.LET)) {
-            Expression expr = parseExpr(0);
+            Expression expr = parseExpr();
             consume(";");
             return new StmtExpr.Let(expr);
         }
@@ -126,7 +126,19 @@ public class Parser {
                 return new StmtExpr.Function(identifier, params, block);
             }
         }
+        return parseReturn();
+    }
 
+    private Expression parseReturn() throws Exception {
+        if (match(TokenType.RETURN)) {
+            Expression expr = parseExpr(0);
+            consume(";");
+            return new StmtExpr.Return(expr);
+        }
+        return parseExpr();
+    }
+
+    private Expression parseExpr() throws Exception {
         return parseExpr(0);
     }
 

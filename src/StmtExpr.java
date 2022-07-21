@@ -83,4 +83,27 @@ abstract public class StmtExpr extends Expression {
             v.visit(this);
         }
     }
+
+    public static class Return extends StmtExpr
+    {
+        private Expression mExpr;
+        
+        Return(Expression expr) {
+            mExpr = expr;
+        }
+
+        Expression getExpr() {
+            return mExpr;
+        }
+
+        @Override
+        public String toString() {
+            return "Return(" + mExpr.toString() + ")";
+        }
+
+        @Override
+        public void accept(Visitor v) throws Exception {
+            v.visit(this);
+        }
+    }
 }

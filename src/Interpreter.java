@@ -136,4 +136,9 @@ public class Interpreter implements Visitor {
         String identifier = ((Primary.Identifier) node.getIdentifier()).getValue().toString();
         mGlobals.define(identifier, node);
     }
+
+    @Override
+    public void visit(StmtExpr.Return node) throws Exception {
+        node.getExpr().accept(this);
+    }
 }

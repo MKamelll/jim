@@ -4,4 +4,5 @@ public interface Visitor {
     public void visit(StmtExpr.Let node) throws Exception;
     public void visit(StmtExpr.Block node) throws Exception;
     public void visit(StmtExpr.Function node) throws Exception;
+    public void visit(StmtExpr.Return node) throws Exception;
 }
