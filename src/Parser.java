@@ -116,6 +116,10 @@ public class Parser {
     private Expression parseNumber() throws Exception {
         if (match(TokenType.DOUBLE)) {
             return new Primary.Number(prev().getLexeme());
+        } else if (match(TokenType.LEFT_PAREN)) {
+            Expression expr = parseExpr(0);
+            consume(")");
+            return expr;
         }
 
         return parseIdentifier();
