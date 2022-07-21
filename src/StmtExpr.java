@@ -106,4 +106,33 @@ abstract public class StmtExpr extends Expression {
             v.visit(this);
         }
     }
+
+    public static class Call extends StmtExpr
+    {
+        private Expression mIdentifier;
+        private ArrayList<Expression> mArgs;
+
+        Call(Expression identifier, ArrayList<Expression> args) {
+            mIdentifier = identifier;
+            mArgs = args;
+        }
+
+        Expression getIdentifier() {
+            return mIdentifier;
+        }
+
+        ArrayList<Expression> getArgs() {
+            return mArgs;
+        }
+
+        @Override
+        public String toString() {
+            return "Call(identifier: " + mIdentifier.toString() + ", args: " + mArgs.toString() + ")";
+        }
+
+        @Override
+        public void accept(Visitor v) throws Exception {
+            v.visit(this);
+        }
+    }
 }

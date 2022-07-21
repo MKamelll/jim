@@ -112,7 +112,8 @@ public class Parser {
 
     private Expression parseFunction() throws Exception {
         if (match(TokenType.FUNCTION)) {
-            Expression identifier = parseIdentifier();
+            if (!match(TokenType.IDENTIFIER)) throw new Exception("Expected an identifier after 'function'");
+            Expression identifier = new Primary.Identifier(prev().getLexeme());
             if (match(TokenType.LEFT_PAREN)) {
                 var params = new ArrayList<Expression>();
                 while (!check(TokenType.RIGHT_PAREN)) {
@@ -134,6 +135,23 @@ public class Parser {
             Expression expr = parseExpr(0);
             consume(";");
             return new StmtExpr.Return(expr);
+        }
+        return parseCall();
+    }
+
+    private Expression parseCall() throws Exception {
+        if (match(TokenType.IDENTIFIER)) {
+            Expression identifier = new Primary.Identifier(prev().getLexeme());
+            if (!match(TokenType.LEFT_PAREN)) return identifier;
+            var args = new ArrayList<Expression>();
+            while (!check(TokenType.RIGHT_PAREN)) {
+                Expression param = parseExpr();
+                args.add(param);
+                match(TokenType.COMMA);
+            }
+            consume(")");
+            consume(";");
+            return new StmtExpr.Call(identifier, args);
         }
         return parseExpr();
     }
@@ -181,10 +199,24 @@ public class Parser {
     
     private Expression parseIdentifier() throws Exception {
         if (match(TokenType.IDENTIFIER)) {
+            if (check(TokenType.LEFT_PAREN)) return parseCallExpr();
             return new Primary.Identifier(prev().getLexeme());
         }
         
         throw new RuntimeException("Expected primary instead got, '" + curr().getLexeme().toString() + "'");
+    }
+
+    private Expression parseCallExpr() throws Exception {
+        Expression identifier = new Primary.Identifier(prev().getLexeme());
+        match(TokenType.LEFT_PAREN);
+        var args = new ArrayList<Expression>();
+        while (!check(TokenType.RIGHT_PAREN)) {
+            Expression param = parseExpr();
+            args.add(param);
+            match(TokenType.COMMA);
+        }
+        consume(")");
+        return new StmtExpr.Call(identifier, args);
     }
 
 }

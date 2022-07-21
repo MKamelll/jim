@@ -38,12 +38,13 @@ public class Interpreter implements Visitor {
     }
 
     @Override
-    public void visit(Primary node) throws Exception {
-        if (node instanceof Primary.Number) {
-            mResult = node.getValue();
-        } else if (node instanceof Primary.Identifier) {
-            mResult = mGlobals.get(node.getValue().toString());
-        }
+    public void visit(Primary.Number node) throws Exception {
+        mResult = node.getValue();
+    }
+
+    @Override
+    public void visit(Primary.Identifier node) throws Exception {
+        mResult = mGlobals.get(node.getValue().toString());
     }
 
     @Override
@@ -140,5 +141,23 @@ public class Interpreter implements Visitor {
     @Override
     public void visit(StmtExpr.Return node) throws Exception {
         node.getExpr().accept(this);
+    }
+
+    @Override
+    public void visit(StmtExpr.Call node) throws Exception {
+        var identifier = node.getIdentifier();
+        if (!(identifier instanceof Primary.Identifier)) throw new Exception("Expected an identifier");
+        var function = (StmtExpr.Function) mGlobals.get(((Primary.Identifier) identifier).getValue().toString());
+        var params = function.getParams();
+        var args = node.getArgs();
+        if (args.size() != params.size())
+            throw new Exception("Expected '" + params.size() + "' parameters, indstead got '" + args.size() + "'");
+        
+        for (int i = 0; i < params.size(); i++) {
+            args.get(i).accept(this);
+            mGlobals.define(((Primary.Identifier) params.get(i)).getValue().toString(), mResult);
+        }
+
+        function.getBlock().accept(this);
     }
 }
