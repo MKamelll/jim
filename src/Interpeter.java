@@ -105,4 +105,21 @@ public class Interpeter implements Visitor {
             }         
         }
     }
+
+    @Override
+    public void visit(StmtExpr.Let node) throws Exception {
+        Expression expr = node.getExpr();
+        if (!(expr instanceof Binary)) {
+            throw new Exception("Expected a variable definition after let");
+        }
+
+        Expression lhs = ((Binary) expr).getLhs();
+        if (!(lhs instanceof Primary.Identifier)) {
+            throw new Exception("Expected an identifier after let");
+        }
+
+        String identifier = ((Primary.Identifier) lhs).getValue().toString();
+        ((Binary) expr).getRhs().accept(this);
+        mGlobals.define(identifier, Double.valueOf(mResult.toString()));
+    }
 }

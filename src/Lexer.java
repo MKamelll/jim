@@ -94,6 +94,11 @@ public class Lexer {
                 advance();
                 return new Token(TokenType.CARROT, '^');
             }
+            case ';':
+            {
+                advance();
+                return new Token(TokenType.SEMICOLON, ';');
+            }
             case ' ': case '\t': case '\n':
             {
                 advance();
@@ -107,6 +112,8 @@ public class Lexer {
                     var ident = identifier();
                     if (ident.equals("function")) {
                         return new Token(TokenType.FUNCTION, ident);
+                    } else if (ident.equals("let")) {
+                        return new Token(TokenType.LET, ident);
                     }
                     return new Token(TokenType.IDENTIFIER, ident);
                 }

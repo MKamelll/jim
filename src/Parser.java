@@ -41,8 +41,24 @@ public class Parser {
         return false;
     }
 
+    private void consume(String ch) throws Exception {
+        if (!mCurrentToken.getLexeme().toString().equals(ch)) {
+            throw new Exception("Expected '" + ch + "', instead got '" + curr().getLexeme().toString() + "'");
+        }
+        advance();
+    }
+
+    private void consume(String ch, String hint) throws Exception {
+        if (!mCurrentToken.getLexeme().toString().equals(ch)) {
+            throw new Exception("Expected '" + ch
+                + "', instead got '" + curr().getLexeme().toString() + "', \n hint: " + hint);
+        }
+        advance();
+    }
+
     private OpInfo getOpInfo(String op) {
         switch (op) {
+            case "=": return new OpInfo(3, Associativity.RIGHT);
             case "+": return new OpInfo(4, Associativity.LEFT);
             case "-": return new OpInfo(4, Associativity.LEFT);
             case "*": return new OpInfo(5, Associativity.LEFT);
@@ -56,9 +72,20 @@ public class Parser {
 
     ArrayList<Expression> parse() throws Exception {
         if (isAtEnd()) return mTrees;
+        if (match(TokenType.LET)) {
+            Expression expr = parseLet();
+            consume(";");
+            mTrees.add(expr);
+            return parse();
+        }
         Expression expr = parseExpr(0);
         mTrees.add(expr);
         return parse();
+    }
+
+    private Expression parseLet() throws Exception {
+        Expression expr = parseExpr(0);
+        return new StmtExpr.Let(expr);
     }
 
     private Expression parseExpr(int minPrec) throws Exception {
