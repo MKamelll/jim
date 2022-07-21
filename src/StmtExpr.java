@@ -5,7 +5,7 @@ abstract public class StmtExpr extends Expression {
     
     public static class Let extends StmtExpr
     {
-        Expression mExpr;
+        private Expression mExpr;
         
         Let(Expression expr) {
             mExpr = expr;
@@ -28,7 +28,7 @@ abstract public class StmtExpr extends Expression {
 
     public static class Block extends StmtExpr
     {
-        ArrayList<Expression> mExprs;
+        private ArrayList<Expression> mExprs;
         
         Block(ArrayList<Expression> list) {
             mExprs = list;
@@ -43,6 +43,41 @@ abstract public class StmtExpr extends Expression {
             return "Block(" + mExprs.toString() + ")";
         }
 
+        @Override
+        public void accept(Visitor v) throws Exception {
+            v.visit(this);
+        }
+    }
+
+    public static class Function extends StmtExpr
+    {
+        private Expression mIdentifier;
+        private ArrayList<Expression> mParams;
+        private Expression mBlock;
+
+        Function(Expression identifier, ArrayList<Expression> params, Expression block) {
+            mIdentifier = identifier;
+            mParams = params;
+            mBlock = block;
+        }
+
+        Expression getIdentifier() {
+            return mIdentifier;
+        }
+
+        ArrayList<Expression> getParams() {
+            return mParams;
+        }
+
+        Expression getBlock() {
+            return mBlock;
+        }
+
+        @Override
+        public String toString() {
+            return "Function(params: " + mParams.toString() + ", block: " + mBlock.toString() + ")";
+        }
+        
         @Override
         public void accept(Visitor v) throws Exception {
             v.visit(this);

@@ -45,6 +45,12 @@ public class Parser {
         return curr().getType() == type;
     }
 
+    private void check(String ch) throws Exception {
+        if (!mCurrentToken.getLexeme().toString().equals(ch))
+            throw new Exception("Expected '" + ch + "', instead got '" + curr().getLexeme().toString() + "'");
+
+    }
+
     private void consume(String ch) throws Exception {
         if (!mCurrentToken.getLexeme().toString().equals(ch)) {
             throw new Exception("Expected '" + ch + "', instead got '" + curr().getLexeme().toString() + "'");
@@ -101,6 +107,26 @@ public class Parser {
             consume("}");
             return new StmtExpr.Block(list);
         }
+        return parseFunction();
+    }
+
+    private Expression parseFunction() throws Exception {
+        if (match(TokenType.FUNCTION)) {
+            Expression identifier = parseIdentifier();
+            if (match(TokenType.LEFT_PAREN)) {
+                var params = new ArrayList<Expression>();
+                while (!check(TokenType.RIGHT_PAREN)) {
+                    Expression param = parseIdentifier();
+                    params.add(param);
+                    match(TokenType.COMMA);
+                }
+                consume(")");
+                check("{");
+                Expression block = parseBlock();
+                return new StmtExpr.Function(identifier, params, block);
+            }
+        }
+
         return parseExpr(0);
     }
 

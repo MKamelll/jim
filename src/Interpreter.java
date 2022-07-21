@@ -1,13 +1,13 @@
 import java.util.ArrayList;
 
-public class Interpeter implements Visitor {
+public class Interpreter implements Visitor {
     
     private ArrayList<Expression> mTree;
     private int mCurrIndex;
     private Object mResult;
     private Environment mGlobals;
 
-    Interpeter(ArrayList<Expression> tree) {
+    Interpreter(ArrayList<Expression> tree) {
         mTree = tree;
         mCurrIndex = 0;
         mGlobals = new Environment();
@@ -129,5 +129,11 @@ public class Interpeter implements Visitor {
         for (var expr : list) {
             expr.accept(this);
         }
+    }
+
+    @Override
+    public void visit(StmtExpr.Function node) throws Exception {
+        String identifier = ((Primary.Identifier) node.getIdentifier()).getValue().toString();
+        mGlobals.define(identifier, node);
     }
 }
