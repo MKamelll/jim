@@ -41,6 +41,10 @@ public class Parser {
         return false;
     }
 
+    private boolean check(TokenType type) {
+        return curr().getType() == type;
+    }
+
     private void consume(String ch) throws Exception {
         if (!mCurrentToken.getLexeme().toString().equals(ch)) {
             throw new Exception("Expected '" + ch + "', instead got '" + curr().getLexeme().toString() + "'");
@@ -72,20 +76,32 @@ public class Parser {
 
     ArrayList<Expression> parse() throws Exception {
         if (isAtEnd()) return mTrees;
-        if (match(TokenType.LET)) {
-            Expression expr = parseLet();
-            consume(";");
-            mTrees.add(expr);
-            return parse();
-        }
-        Expression expr = parseExpr(0);
+        Expression expr = parseStmtExpr();
         mTrees.add(expr);
         return parse();
     }
 
+    private Expression parseStmtExpr() throws Exception {
+        return parseLet();
+    }
+
     private Expression parseLet() throws Exception {
-        Expression expr = parseExpr(0);
-        return new StmtExpr.Let(expr);
+        if (match(TokenType.LET)) {
+            Expression expr = parseExpr(0);
+            consume(";");
+            return new StmtExpr.Let(expr);
+        }
+        return parseBlock();
+    }
+
+    private Expression parseBlock() throws Exception {
+        if (match(TokenType.LEFT_BRACE)) {
+            var list = new ArrayList<Expression>();
+            while (!check(TokenType.RIGHT_BRACE)) list.add(parseStmtExpr());
+            consume("}");
+            return new StmtExpr.Block(list);
+        }
+        return parseExpr(0);
     }
 
     private Expression parseExpr(int minPrec) throws Exception {
@@ -130,7 +146,7 @@ public class Parser {
             return new Primary.Identifier(prev().getLexeme());
         }
         
-        throw new RuntimeException("Expected primary instead got, " + curr().getLexeme().toString());
+        throw new RuntimeException("Expected primary instead got, '" + curr().getLexeme().toString() + "'");
     }
 
 }

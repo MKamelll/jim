@@ -122,4 +122,12 @@ public class Interpeter implements Visitor {
         ((Binary) expr).getRhs().accept(this);
         mGlobals.define(identifier, Double.valueOf(mResult.toString()));
     }
+
+    @Override
+    public void visit(StmtExpr.Block node) throws Exception {
+        ArrayList<Expression> list = node.getExprs();
+        for (var expr : list) {
+            expr.accept(this);
+        }
+    }
 }
