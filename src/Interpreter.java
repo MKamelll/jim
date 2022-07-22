@@ -6,11 +6,13 @@ public class Interpreter implements Visitor {
     private int mCurrIndex;
     private Object mResult;
     private Environment mGlobals;
+    private Environment mCurrEnv;
 
     Interpreter(ArrayList<Expression> tree) {
         mTree = tree;
         mCurrIndex = 0;
         mGlobals = new Environment();
+        mCurrEnv = mGlobals;
     }
 
     private boolean isAtEnd() {
@@ -44,7 +46,7 @@ public class Interpreter implements Visitor {
 
     @Override
     public void visit(Primary.Identifier node) throws Exception {
-        mResult = mGlobals.get(node.getValue().toString());
+        mResult = mCurrEnv.get(node.getValue().toString());
     }
 
     @Override
@@ -124,12 +126,20 @@ public class Interpreter implements Visitor {
         mGlobals.define(identifier, Double.valueOf(mResult.toString()));
     }
 
-    @Override
-    public void visit(StmtExpr.Block node) throws Exception {
+    public void excuteBlock(StmtExpr.Block node, Environment environment) throws Exception {
+        Environment previous = mCurrEnv;
+        
+        mCurrEnv = environment;
         ArrayList<Expression> list = node.getExprs();
         for (var expr : list) {
             expr.accept(this);
         }
+        mCurrEnv = previous;
+    }
+
+    @Override
+    public void visit(StmtExpr.Block node) throws Exception {
+        excuteBlock(node, mCurrEnv);
     }
 
     @Override
@@ -141,6 +151,7 @@ public class Interpreter implements Visitor {
     @Override
     public void visit(StmtExpr.Return node) throws Exception {
         node.getExpr().accept(this);
+        throw new Return(mResult);
     }
 
     @Override
@@ -158,6 +169,13 @@ public class Interpreter implements Visitor {
             mGlobals.define(((Primary.Identifier) params.get(i)).getValue().toString(), mResult);
         }
 
-        function.getBlock().accept(this);
+        try {
+            function.getBlock().accept(this);
+        } catch (Return ex) {
+            mResult = ex.getValue();
+            return;
+        }
+
+        mResult = null;
     }
 }

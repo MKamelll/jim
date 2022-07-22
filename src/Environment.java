@@ -1,26 +1,26 @@
 import java.util.HashMap;
 
 public class Environment {
-    HashMap<String, Object> mData;
+    HashMap<String, Object> mClosure;
     Environment mEnclosing;
 
     Environment() {
-        mData = new HashMap<String, Object>();
+        mClosure = new HashMap<String, Object>();
         mEnclosing = null;
     }
 
     Environment(Environment env) {
-        mData = new HashMap<String, Object>();
+        mClosure = new HashMap<String, Object>();
         mEnclosing = env;
     }
 
     void define(String identifier, Object value) {
-        mData.put(identifier, value);
+        mClosure.put(identifier, value);
     }
 
     Object get(String identifier) throws Exception {
-        if (mData.containsKey(identifier)) { 
-            return mData.get(identifier);
+        if (mClosure.containsKey(identifier)) { 
+            return mClosure.get(identifier);
         } else if (mEnclosing != null) {
             mEnclosing.get(identifier);
         }
