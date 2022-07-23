@@ -59,7 +59,7 @@ public class Interpreter implements Visitor {
     }
 
     public Object interpret() throws Exception {
-        if (isAtEnd()) { System.out.println(mSymbols); return mResult; }
+        if (isAtEnd()) return mResult;
         curr().accept(this);
         advance();
         return interpret();

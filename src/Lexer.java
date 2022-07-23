@@ -1,4 +1,3 @@
-import static java.lang.Character.*;
 
 public class Lexer {
     private String mSource;
@@ -133,7 +132,7 @@ public class Lexer {
                 advance();
                 continue;
             }
-            if (!isDigit(curr())) break;;
+            if (!Character.isDigit(curr())) break;
 
             result.append(curr());
             advance();
@@ -145,7 +144,7 @@ public class Lexer {
     private String identifier() {
         var result = new StringBuilder();
         while (!isAtEnd()) {
-            if (!isAlphabetic(curr())) break;
+            if (!Character.isLetterOrDigit(curr())) break;
             result.append(curr());
             advance();
         }
