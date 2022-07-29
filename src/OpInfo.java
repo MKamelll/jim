@@ -1,3 +1,5 @@
+package jim.src;
+
 public class OpInfo {
     private int mPrec;
     private Associativity mAssoc;

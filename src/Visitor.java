@@ -1,3 +1,5 @@
+package jim.src;
+
 public interface Visitor {
     public void visit(Primary.Number node) throws Exception;
     public void visit(Primary.Identifier node) throws Exception;

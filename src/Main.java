@@ -1,3 +1,5 @@
+package jim.src;
+
 public class Main {
     public static void main(String[] args) throws Exception {
         var t = "function (x, y) { 3 + 5 * 4 }";

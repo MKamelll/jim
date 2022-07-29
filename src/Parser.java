@@ -1,3 +1,5 @@
+package jim.src;
+
 import java.util.ArrayList;
 
 public class Parser {
@@ -6,7 +8,7 @@ public class Parser {
     private Token mPrevToken;
     private ArrayList<Expression> mTrees;
 
-    Parser(Lexer lexer) throws Exception {
+    public Parser(Lexer lexer) throws Exception {
         mLexer = lexer;
         mCurrentToken = mLexer.next();
         mPrevToken = mCurrentToken;
@@ -80,7 +82,7 @@ public class Parser {
         return new OpInfo(-1, Associativity.NONE);
     }
 
-    ArrayList<Expression> parse() throws Exception {
+    public ArrayList<Expression> parse() throws Exception {
         if (isAtEnd()) return mTrees;
         Expression expr = parseStmtExpr();
         mTrees.add(expr);

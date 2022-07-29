@@ -1,3 +1,5 @@
+package jim.src;
+
 import java.util.ArrayList;
 
 abstract public class StmtExpr extends Expression {
@@ -61,21 +63,21 @@ abstract public class StmtExpr extends Expression {
             mBlock = block;
         }
 
-        Expression getIdentifier() {
+        public Expression getIdentifier() {
             return mIdentifier;
         }
 
-        ArrayList<Expression> getParams() {
+        public ArrayList<Expression> getParams() {
             return mParams;
         }
 
-        Expression getBlock() {
+        public Expression getBlock() {
             return mBlock;
         }
 
         @Override
         public String toString() {
-            return "Function(params: " + mParams.toString() + ", block: " + mBlock.toString() + ")";
+            return "Function(name: " + mIdentifier.toString() + ", params: " + mParams.toString() + ", block: " + mBlock.toString() + ")";
         }
         
         @Override

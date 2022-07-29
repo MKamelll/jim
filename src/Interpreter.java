@@ -1,3 +1,5 @@
+package jim.src;
+
 import java.util.ArrayList;
 
 public class Interpreter implements Visitor {
@@ -8,7 +10,7 @@ public class Interpreter implements Visitor {
     private ArrayList<Symbol> mSymbols;
     private int mCurrDepth;
 
-    Interpreter(ArrayList<Expression> tree) {
+    public Interpreter(ArrayList<Expression> tree) {
         mTree = tree;
         mCurrIndex = 0;
         mSymbols = new ArrayList<Symbol>();

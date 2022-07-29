@@ -1,3 +1,5 @@
+package jim.src;
+
 public class Token {
     private TokenType mType;
     private Object mLexeme;

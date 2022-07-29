@@ -1,3 +1,5 @@
+package jim.src;
+
 public class Symbol {
     private String mName;
     private Object mValue;

@@ -1,9 +1,10 @@
+package jim.src;
 
 public class Lexer {
     private String mSource;
     private int mCurrent;
 
-    Lexer(String src) {
+    public Lexer(String src) {
         mSource = src;
         mCurrent = 0;
     }

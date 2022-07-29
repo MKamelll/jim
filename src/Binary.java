@@ -1,3 +1,5 @@
+package jim.src;
+
 public class Binary extends Expression {
     private String mOp;
     private Expression mLhs;

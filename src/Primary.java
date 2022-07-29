@@ -1,14 +1,16 @@
+package jim.src;
+
 abstract public class Primary extends Expression {
     protected Object mValue;
     abstract Object getValue();
 
-    static class Number extends Primary {
+    public static class Number extends Primary {
         Number(Object value) {
            mValue = value;
         }
         
         @Override
-        Object getValue() {
+        public Object getValue() {
             return mValue;
         }
 
@@ -23,13 +25,13 @@ abstract public class Primary extends Expression {
         }
     }
 
-    static class Identifier extends Primary {
+    public static class Identifier extends Primary {
         Identifier(Object value) {
            mValue = value;
         }
 
         @Override
-        Object getValue() {
+        public Object getValue() {
             return mValue;
         }
 
