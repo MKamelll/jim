@@ -114,16 +114,16 @@ abstract public class StmtExpr extends Expression {
         private Expression mIdentifier;
         private ArrayList<Expression> mArgs;
 
-        Call(Expression identifier, ArrayList<Expression> args) {
+        public Call(Expression identifier, ArrayList<Expression> args) {
             mIdentifier = identifier;
             mArgs = args;
         }
 
-        Expression getIdentifier() {
+        public Expression getIdentifier() {
             return mIdentifier;
         }
 
-        ArrayList<Expression> getArgs() {
+        public ArrayList<Expression> getArgs() {
             return mArgs;
         }
 

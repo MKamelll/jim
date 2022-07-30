@@ -5,7 +5,7 @@ abstract public class Primary extends Expression {
     abstract Object getValue();
 
     public static class Number extends Primary {
-        Number(Object value) {
+        public Number(Object value) {
            mValue = value;
         }
         
@@ -26,7 +26,7 @@ abstract public class Primary extends Expression {
     }
 
     public static class Identifier extends Primary {
-        Identifier(Object value) {
+        public Identifier(Object value) {
            mValue = value;
         }
 
